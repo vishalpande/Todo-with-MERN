@@ -35,6 +35,48 @@ todoRoutes.route("/:id").get(async (req, res) => {
   res.send(data);
 });
 
+// update the data
+todoRoutes.route("/update/:id").put(async (req, res) => {
+  let id = new ObjectId(req.params.id);
+  let data = await db.collection("todos").findOneAndUpdate(
+    { _id: id },
+
+    {
+      $set: {
+        todo_description: req.body.todo_description,
+        todo_responsible: req.body.todo_responsible,
+        todo_priority: req.body.todo_priority,
+        todo_complete: req.body.todo_complete
+      },
+    },
+    {
+      returnDocument: "after",
+    }
+  );
+  res.send(data);
+});
+
+
+//Delete all  the data
+
+todoRoutes.route("/delete").delete((req,res)=>{
+
+let data =db.collection('todos').deleteMany({})
+res.send(data)
+
+
+})
+
+// delete specific one
+
+todoRoutes.route("/delete/:id").delete(async(req,res)=>{
+let id=new ObjectId(req.params.id);
+ let data=await db.collection('todos').deleteOne({_id:id})
+res.send(data)
+
+})
+
+
 async function connectDb() {
   // connecting the mongodb
 
@@ -45,5 +87,5 @@ async function connectDb() {
   app.listen(4000, () => {
     console.log("listening on port no 4000");
   });
-};
+}
 connectDb().then(console.log).catch(console.error);
