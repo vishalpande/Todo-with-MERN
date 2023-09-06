@@ -1,9 +1,12 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 var { ObjectId } = require("mongodb");
+const cors=require("cors");
 
 const app = express();
+
 const todoRoutes = express.Router();
+app.use(cors());
 app.use(express.json());
 app.use("/todos", todoRoutes);
 
@@ -63,7 +66,7 @@ todoRoutes.route("/delete").delete((req,res)=>{
 
 let data =db.collection('todos').deleteMany({})
 res.send(data)
-
+ 
 
 })
 
